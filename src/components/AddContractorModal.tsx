@@ -14,7 +14,7 @@ export default function AddContractorModal({ onClose }: { onClose: () => void })
     CompanyZip: '',
     CompanyCity: '',
     CompanyAddress: '',
-    CompanyRegistrationDate: '',
+    CompanyRegistrationDate: '2025-04-25',
   });
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -29,9 +29,9 @@ export default function AddContractorModal({ onClose }: { onClose: () => void })
     setLoading(true);
 
     if (!canSave) return;
-        const created = await addContractor({ ...form, Users: 0 });
+              const created = await addContractor({ ...form, Users: 0 });
     onClose();
-    if (created?.CompanyId)     router.push(`/kontrahenci/${created.CompanyId}`);
+    if (created?.CompanyId)                 router.push(`/kontrahenci/${created.CompanyId}`);
       setLoading(false);
   };
 
