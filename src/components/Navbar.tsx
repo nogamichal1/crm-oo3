@@ -3,6 +3,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useAuth } from '@/providers/AuthProvider';
 import { usePathname } from 'next/navigation';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/firebase/config';
@@ -18,6 +19,10 @@ const links = [
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const { user } = useAuth();
+
+  // Ukryj pasek, jeśli użytkownik nie jest zalogowany (np. /login)
+  if (!user) return null;
 
   const handleSignOut = () => {
     if (!auth) return;
