@@ -26,3 +26,11 @@ pnpm dev
 | NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET | hogs-crm.appspot.com |
 | NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID | 313138877652 |
 | NEXT_PUBLIC_FIREBASE_APP_ID | 1:313138877652:web:abcd1234 |
+
+
+## MySQL configuration
+This project now stores contractors in the MySQL database provided:
+```
+DATABASE_URL=mysql://root:da2xY2vyCVrxlb2Q@54.38.137.2:3706/kontrahenci_db
+```
+Make sure the schema exists and run `pnpm prisma generate` or `npx prisma db push` to create tables before first start.

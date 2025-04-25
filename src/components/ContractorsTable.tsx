@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { useContractors } from '@/context/ContractorsContext';
 import Link from 'next/link';
 
 type Contractor = {
@@ -12,11 +13,6 @@ type Contractor = {
   created: string; // ISO date
 };
 
-const sample: Contractor[] = [
-  { id: 'C-001', company: 'Hogs Logistics Sp. z o.o.', vat: 'PL1234567890', users: 12, created: '2023-05-12' },
-  { id: 'C-002', company: 'Freight Automation SA', vat: 'PL9876543210', users: 5, created: '2024-01-03' },
-  { id: 'C-003', company: 'Test Company', vat: 'PL1112223334', users: 3, created: '2023-12-24' },
-];
 
 type SortState = {
   key: keyof Contractor;
@@ -24,12 +20,13 @@ type SortState = {
 };
 
 export default function ContractorsTable() {
+  const { contractors } = useContractors();
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState<SortState>({ key: 'company', direction: 'asc' });
 
   const filtered = useMemo(() => {
-    return sample.filter((c) =>
-      [c.id, c.company, c.vat, c.users.toString(), c.created]
+    return contractors.filter((c) =>
+      [c.CompanyId.toString(), c.CompanyName, c.CompanyVat, c.Users.toString(), c.CompanyRegistrationDate]
         .some((field) => field.toLowerCase().includes(query.toLowerCase()))
     );
   }, [query]);
@@ -75,7 +72,6 @@ export default function ContractorsTable() {
           className="ml-4 bg-brand-primary text-white py-2 px-4 rounded shadow hover:opacity-90 transition"
           disabled
         >
-          Dodaj kontrahenta
         </button>
       </div>
       <div className="overflow-x-auto bg-white rounded-2xl shadow">
@@ -102,14 +98,14 @@ export default function ContractorsTable() {
           </thead>
           <tbody className="divide-y divide-gray-100">
             {sorted.map((c) => (
-              <tr key={c.id} className="hover:bg-gray-50">
-                <td className="px-4 py-2">{c.id}</td>
-                <td className="px-4 py-2">{c.company}</td>
-                <td className="px-4 py-2">{c.vat}</td>
-                <td className="px-4 py-2 text-center">{c.users}</td>
-                <td className="px-4 py-2">{new Date(c.created).toLocaleDateString()}</td>
+              <tr key={c.CompanyId.toString()} className="hover:bg-gray-50">
+                <td className="px-4 py-2">{c.CompanyId.toString()}</td>
+                <td className="px-4 py-2">{c.CompanyName}</td>
+                <td className="px-4 py-2">{c.CompanyVat}</td>
+                <td className="px-4 py-2 text-center">{c.Users}</td>
+                <td className="px-4 py-2">{new Date(c.CompanyRegistrationDate).toLocaleDateString()}</td>
                 <td className="px-4 py-2">
-                  <Link href={`/kontrahenci/${c.id}`}
+                  <Link href={`/kontrahenci/${c.CompanyId.toString()}`}
                     className="text-brand-primary underline hover:no-underline">
                     Folder
                   </Link>
