@@ -72,7 +72,6 @@ export default function ContractorsTable() {
           className="ml-4 bg-brand-primary text-white py-2 px-4 rounded shadow hover:opacity-90 transition"
           disabled
         >
-          Dodaj kontrahenta
         </button>
       </div>
       <div className="overflow-x-auto bg-white rounded-2xl shadow">

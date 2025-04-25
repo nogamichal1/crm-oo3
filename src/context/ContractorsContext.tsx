@@ -33,14 +33,18 @@ export function ContractorsProvider({ children }: { children: React.ReactNode })
   const { data: contractors = [] } = useSWR<ContractorDB[]>('/api/contractors', fetcher);
 
   const addContractor = async (payload: Partial<ContractorDB>) => {
-    const res = await fetch('/api/contractors', {
+    try {          const res = await fetch('/api/contractors', {
       method: 'POST',
       body: JSON.stringify(payload),
       headers: { 'Content-Type': 'application/json' },
     });
     const created = await res.json();
     mutate('/api/contractors', (prev: ContractorDB[] = []) => [...prev, created]);
-    return created;
+          return created;
+    } catch (e) {
+      console.error('Add contractor failed', e);
+      throw e;
+    }
   };
 
   const updateContractor = async (id: number, payload: Partial<ContractorDB>) => {

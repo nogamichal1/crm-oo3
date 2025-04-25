@@ -20,13 +20,19 @@ export default function AddContractorModal({ onClose }: { onClose: () => void })
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
+  const [loading,setLoading]=useState(false);
   const canSave = Object.values(form).every((v) => v);
 
+  
   const handleSave = async () => {
+    if (loading || !canSave) return;
+    setLoading(true);
+
     if (!canSave) return;
-    const created = await addContractor({ ...form, Users: 0 });
+        const created = await addContractor({ ...form, Users: 0 });
     onClose();
-    if (created?.CompanyId) router.push(`/kontrahenci/${created.CompanyId}`);
+    if (created?.CompanyId)     router.push(`/kontrahenci/${created.CompanyId}`);
+      setLoading(false);
   };
 
   const fieldList = [
@@ -65,12 +71,12 @@ export default function AddContractorModal({ onClose }: { onClose: () => void })
           </button>
           <button
             onClick={handleSave}
-            disabled={!canSave}
+            disabled={!canSave || loading}
             className={`py-2 px-6 rounded text-white font-semibold ${
               canSave ? 'bg-brand-primary hover:opacity-90' : 'bg-gray-400 cursor-not-allowed'
             }`}
           >
-            Zapisz
+            {loading ? 'Zapisywanie...' : 'Zapisz'}
           </button>
         </div>
       </div>

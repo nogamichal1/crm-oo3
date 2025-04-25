@@ -10,6 +10,11 @@ export async function GET() {
 
 export async function POST(req: Request) {
   const body = await req.json();
-  const created = await prisma.company.create({ data: body });
+  
+const data = { ...body };
+if (data.CompanyRegistrationDate)
+  data.CompanyRegistrationDate = new Date(data.CompanyRegistrationDate);
+const created = await prisma.company.create({ data });
+
   return NextResponse.json(created, { status: 201 });
 }
