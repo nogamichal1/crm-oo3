@@ -16,13 +16,13 @@ export default function ContractorDetails() {
     CompanyCountry: '',
     CompanyZip: '',
     CompanyCity: '',
-    CompanyAdress: '',
+    CompanyAddress: '',
   });
 
   useEffect(() => {
     if (contractor) {
-      const { CompanyName, CompanyVat, CompanyCountry, CompanyZip, CompanyCity, CompanyAdress } = contractor;
-      setForm({ CompanyName, CompanyVat, CompanyCountry, CompanyZip, CompanyCity, CompanyAdress });
+      const { CompanyName, CompanyVat, CompanyCountry, CompanyZip, CompanyCity, CompanyAddress } = contractor;
+      setForm({ CompanyName, CompanyVat, CompanyCountry, CompanyZip, CompanyCity, CompanyAddress });
     }
   }, [contractor]);
 
@@ -53,7 +53,7 @@ export default function ContractorDetails() {
           { label: 'Kraj', name: 'CompanyCountry' },
           { label: 'Kod pocztowy', name: 'CompanyZip' },
           { label: 'Miasto', name: 'CompanyCity' },
-          { label: 'Ulica i numer', name: 'CompanyAdress' },
+          { label: 'Ulica i numer', name: 'CompanyAddress' },
         ] as const).map((f) => (
           <div key={f.name}>
             <label className="block text-sm font-medium mb-1">{f.label}</label>
