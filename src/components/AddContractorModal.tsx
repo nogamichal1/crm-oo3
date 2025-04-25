@@ -1,10 +1,12 @@
 
 'use client';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useContractors } from '@/context/ContractorsContext';
 
 export default function AddContractorModal({ onClose }: { onClose: () => void }) {
   const { addContractor } = useContractors();
+  const router = useRouter();
   const [form, setForm] = useState({
     CompanyName: '',
     CompanyVat: '',
@@ -22,8 +24,9 @@ export default function AddContractorModal({ onClose }: { onClose: () => void })
 
   const handleSave = async () => {
     if (!canSave) return;
-    await addContractor({ ...form, Users: 0 });
+    const created = await addContractor({ ...form, Users: 0 });
     onClose();
+    if (created?.CompanyId) router.push(`/kontrahenci/${created.CompanyId}`);
   };
 
   const fieldList = [
