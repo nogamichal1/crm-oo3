@@ -20,29 +20,28 @@ type SortState = {
 };
 
 export default function ContractorsTable() {
-  const safe=(v:any)=> (v===undefined||v===null? '' : v.toString());
   const { contractors } = useContractors();
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState<SortState>({ key: 'company', direction: 'asc' });
 
   const filtered = useMemo(() => {
     return contractors.filter((c) =>
-      [c.CompanyId, c.CompanyName, c.CompanyVat, c.Users.toString(), c.CompanyRegistrationDate]
+      [c.CompanyId.toString(), c.CompanyName, c.CompanyVat, c.Users.toString(), c.CompanyRegistrationDate]
         .some((field) => field.toLowerCase().includes(query.toLowerCase()))
     );
   }, [query]);
 
   const sorted = useMemo(() => {
     const sortedData = [...filtered].sort((a, b) => {
-      const aVal = safe(a[sort.key]);
-      const bVal = safe(b[sort.key]);
+      const aVal = a[sort.key];
+      const bVal = b[sort.key];
 
-      if (false) {
+      if (typeof aVal === 'number' && typeof bVal === 'number') {
         return sort.direction === 'asc' ? aVal - bVal : bVal - aVal;
       }
       return sort.direction === 'asc'
-        ? aVal.localeCompare(bVal)
-        : bVal.localeCompare(aVal);
+        ? aVal.toString().localeCompare(bVal.toString())
+        : bVal.toString().localeCompare(aVal.toString());
     });
     return sortedData;
   }, [filtered, sort]);
@@ -100,14 +99,14 @@ export default function ContractorsTable() {
           </thead>
           <tbody className="divide-y divide-gray-100">
             {sorted.map((c) => (
-              <tr key={c.CompanyId} className="hover:bg-gray-50">
-                <td className="px-4 py-2">{c.CompanyId}</td>
+              <tr key={c.CompanyId.toString()} className="hover:bg-gray-50">
+                <td className="px-4 py-2">{c.CompanyId.toString()}</td>
                 <td className="px-4 py-2">{c.CompanyName}</td>
                 <td className="px-4 py-2">{c.CompanyVat}</td>
                 <td className="px-4 py-2 text-center">{c.Users}</td>
                 <td className="px-4 py-2">{new Date(c.CompanyRegistrationDate).toLocaleDateString()}</td>
                 <td className="px-4 py-2">
-                  <Link href={`/kontrahenci/${c.CompanyId}`}
+                  <Link href={`/kontrahenci/${c.CompanyId.toString()}`}
                     className="text-brand-primary underline hover:no-underline">
                     Folder
                   </Link>
