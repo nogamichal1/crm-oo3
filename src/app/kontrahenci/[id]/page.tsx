@@ -7,7 +7,8 @@ import { useState, useEffect } from 'react';
 export default function ContractorDetails() {
   const { id } = useParams();
   const { contractors, updateContractor } = useContractors();
-  const contractor = contractors.find((c) => c.CompanyId === id) ?? null;
+  const numericId = parseInt(Array.isArray(id)? id[0] : id, 10);
+  const contractor = contractors.find((c) => c.CompanyId === numericId) ?? null;
 
   const [form, setForm] = useState({
     CompanyName: '',
@@ -35,7 +36,7 @@ export default function ContractorDetails() {
 
   const handleSave = () => {
     if (!contractor) return;
-    updateContractor(contractor.CompanyId, form);
+    updateContractor(numericId, form);
   };
 
   if (!contractor) {
