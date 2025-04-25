@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -17,6 +18,11 @@ const links = [
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+
+  const handleSignOut = () => {
+    if (!auth) return;
+    signOut(auth);
+  };
 
   return (
     <nav className="bg-brand-dark text-white">
@@ -41,7 +47,7 @@ export default function Navbar() {
             </li>
           ))}
           <li>
-            <button onClick={() => signOut(auth)} className="ml-4 underline">
+            <button onClick={handleSignOut} className="ml-4 underline">
               Wyloguj
             </button>
           </li>
@@ -61,7 +67,7 @@ export default function Navbar() {
             </li>
           ))}
           <li>
-            <button onClick={() => signOut(auth)} className="underline">
+            <button onClick={handleSignOut} className="underline">
               Wyloguj
             </button>
           </li>

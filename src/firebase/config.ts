@@ -1,4 +1,4 @@
-import { initializeApp, getApps } from "firebase/app";
+import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
@@ -10,5 +10,13 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
-export const auth = getAuth(app);
+// Only initialize in the browser to avoid errors during SSR/Static Export
+const app =
+  typeof window !== "undefined"
+    ? !getApps().length
+      ? initializeApp(firebaseConfig)
+      : getApp()
+    : undefined;
+
+export const auth =
+  typeof window !== "undefined" && app ? getAuth(app) : undefined;
