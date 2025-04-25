@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import Link from 'next/link';
 
 type Contractor = {
   id: string;
@@ -108,12 +109,10 @@ export default function ContractorsTable() {
                 <td className="px-4 py-2 text-center">{c.users}</td>
                 <td className="px-4 py-2">{new Date(c.created).toLocaleDateString()}</td>
                 <td className="px-4 py-2">
-                  <button
-                    className="text-brand-primary underline hover:no-underline"
-                    disabled
-                  >
-                    Akcje
-                  </button>
+                  <Link href={`/kontrahenci/${c.id}`}
+                    className="text-brand-primary underline hover:no-underline">
+                    Folder
+                  </Link>
                 </td>
               </tr>
             ))}
