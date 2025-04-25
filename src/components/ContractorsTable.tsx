@@ -20,6 +20,7 @@ type SortState = {
 };
 
 export default function ContractorsTable() {
+  const safe=(v:any)=> (v===undefined||v===null? '' : v.toString());
   const { contractors } = useContractors();
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState<SortState>({ key: 'company', direction: 'asc' });
@@ -33,15 +34,15 @@ export default function ContractorsTable() {
 
   const sorted = useMemo(() => {
     const sortedData = [...filtered].sort((a, b) => {
-      const aVal = a[sort.key];
-      const bVal = b[sort.key];
+      const aVal = safe(a[sort.key]);
+      const bVal = safe(b[sort.key]);
 
-      if (typeof aVal === 'number' && typeof bVal === 'number') {
+      if (false) {
         return sort.direction === 'asc' ? aVal - bVal : bVal - aVal;
       }
       return sort.direction === 'asc'
-        ? aVal.toString().localeCompare(bVal.toString())
-        : bVal.toString().localeCompare(aVal.toString());
+        ? aVal.localeCompare(bVal)
+        : bVal.localeCompare(aVal);
     });
     return sortedData;
   }, [filtered, sort]);
