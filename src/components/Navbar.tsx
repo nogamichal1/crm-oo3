@@ -25,7 +25,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-brand-dark text-white">
+    <nav className="fixed top-0 inset-x-0 z-50 bg-brand-dark bg-brand-dark text-white">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
         <div className="text-xl font-semibold">HOGS CRM</div>
         <button
