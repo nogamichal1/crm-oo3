@@ -11,6 +11,13 @@ const firebaseConfig = {
 };
 
 // Only initialize in the browser to avoid errors during SSR/Static Export
+// Check for missing env vars
+const missing = Object.entries(firebaseConfig).some(([_, v]) => !v);
+if (missing && typeof window !== 'undefined') {
+  // eslint-disable-next-line no-console
+  console.error('❌ Firebase env vars missing – check Vercel Environment Variables');
+}
+
 const app =
   typeof window !== "undefined"
     ? !getApps().length
