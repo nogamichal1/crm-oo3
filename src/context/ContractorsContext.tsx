@@ -45,8 +45,7 @@ export function ContractorsProvider({ children }: { children: React.ReactNode })
   throw err;
 }
 const created = await res.json();
-    await mutate('/api/contractors'); // odświeżenie listy z serwera
-          
+    await mutate('/api/contractors'); // re-fetch list after create
           return created;
     } catch (e) {
       console.error('Add contractor failed', e);
