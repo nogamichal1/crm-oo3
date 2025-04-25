@@ -21,19 +21,24 @@ export default function AddContractorModal({ onClose }: { onClose: () => void })
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const [loading,setLoading]=useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   const canSave = Object.values(form).every((v) => v);
 
   
   const handleSave = async () => {
-    if (loading || !canSave) return;
-    setLoading(true);
-
-    if (!canSave) return;
-              const created = await addContractor({ ...form, Users: 0 });
+  if (loading || !canSave) return;
+  setLoading(true);
+  try {
+    const created = await addContractor({ ...form, Users: 0 });
     onClose();
-    if (created?.CompanyId)                 router.push(`/kontrahenci/${created.CompanyId}`);
-      setLoading(false);
-  };
+    if (created?.CompanyId) router.push(`/kontrahenci/${created.CompanyId}`);
+  } catch (e: any) {
+    if (e?.status === 409) setErrorMsg('Firma z takim NIP‑em już istnieje');
+    else setErrorMsg('Wystąpił błąd – spróbuj ponownie');
+  } finally {
+    setLoading(false);
+  }
+};
 
   const fieldList = [
     ['Nazwa firmy', 'CompanyName'],
@@ -62,6 +67,7 @@ export default function AddContractorModal({ onClose }: { onClose: () => void })
             </div>
           ))}
         </div>
+        {errorMsg && <p className="text-red-600 text-sm mt-4" role="alert">{errorMsg}</p>}
         <div className="flex justify-end gap-4 mt-6">
           <button
             onClick={onClose}

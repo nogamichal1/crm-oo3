@@ -11,7 +11,7 @@ generator client {
 model Company {
   CompanyId               Int      @id @default(autoincrement())
   CompanyName             String   @db.VarChar(255)
-  CompanyVat              String   @db.VarChar(32)
+  CompanyVat              String   @unique @db.VarChar(32)
   CompanyCountry          String   @db.VarChar(100)
   CompanyZip              String   @db.VarChar(20)
   CompanyCity             String   @db.VarChar(100)

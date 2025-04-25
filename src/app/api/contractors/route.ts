@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic';
 
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
@@ -10,11 +11,21 @@ export async function GET() {
 
 export async function POST(req: Request) {
   const body = await req.json();
-  
-const data = { ...body };
-if (data.CompanyRegistrationDate)
-  data.CompanyRegistrationDate = new Date(data.CompanyRegistrationDate);
-const created = await prisma.company.create({ data });
+  const data: any = { ...body };
+  if (data.CompanyRegistrationDate) {
+    data.CompanyRegistrationDate = new Date(data.CompanyRegistrationDate);
+  }
 
-  return NextResponse.json(created, { status: 201 });
+  try {
+    const created = await prisma.company.create({ data });
+    return NextResponse.json(created, { status: 201 });
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
+      return NextResponse.json(
+        { message: 'Firma z takim NIP‑em już istnieje' },
+        { status: 409 }
+      );
+    }
+    throw e;
+  }
 }

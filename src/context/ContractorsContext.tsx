@@ -39,7 +39,7 @@ export function ContractorsProvider({ children }: { children: React.ReactNode })
       headers: { 'Content-Type': 'application/json' },
     });
     const created = await res.json();
-    mutate('/api/contractors', (prev: ContractorDB[] = []) => [...prev, created]);
+    mutate('/api/contractors', (prev: ContractorDB[] = []) => [...prev, created], false);
           return created;
     } catch (e) {
       console.error('Add contractor failed', e);
