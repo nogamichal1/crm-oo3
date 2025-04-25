@@ -11,6 +11,7 @@ export async function GET() {
 
 export async function POST(req: Request) {
   const body = await req.json();
+
   const data: any = { ...body };
   if (data.CompanyRegistrationDate) {
     data.CompanyRegistrationDate = new Date(data.CompanyRegistrationDate);
@@ -20,12 +21,14 @@ export async function POST(req: Request) {
     const created = await prisma.company.create({ data });
     return NextResponse.json(created, { status: 201 });
   } catch (e) {
+    // P2002 — unique constraint failed (CompanyVat)
     if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
       return NextResponse.json(
         { message: 'Firma z takim NIP‑em już istnieje' },
-        { status: 409 }
+        { status: 409 },
       );
     }
-    throw e;
+    console.error('POST /api/contractors error', e);
+    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
 }

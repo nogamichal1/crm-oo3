@@ -38,7 +38,13 @@ export function ContractorsProvider({ children }: { children: React.ReactNode })
       body: JSON.stringify(payload),
       headers: { 'Content-Type': 'application/json' },
     });
-    const created = await res.json();
+    if (!res.ok) {
+  const text = await res.text();
+  const err: any = new Error(text || 'Request failed');
+  err.status = res.status;
+  throw err;
+}
+const created = await res.json();
     mutate('/api/contractors', (prev: ContractorDB[] = []) => [...prev, created], false);
           return created;
     } catch (e) {
